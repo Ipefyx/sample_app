@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-	force_ssl
+	# force_ssl
   def show
 		@user = User.find(params[:id])
   end
