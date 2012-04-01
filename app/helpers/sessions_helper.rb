@@ -21,9 +21,29 @@ module SessionsHelper
 		@current_user ||= user_from_remember_token
 	end
 	
+	def current_user?(user)
+		current_user == user
+	end
+	
+	# Friendly forwarding
+	def redirect_back_or(default)
+    redirect_to(session[:return_to] || default)
+    clear_return_to
+  end
+
+  def store_location
+    session[:return_to] = request.fullpath
+  end
+	# end FF
+	
 	private
 		def user_from_remember_token
 			remember_token = cookies[:remember_token]
 			User.find_by_remember_token(remember_token) unless remember_token.nil?
 		end
+		
+		# Friendly forwarding
+		def clear_return_to
+      session.delete(:return_to)
+    end
 end

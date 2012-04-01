@@ -1,7 +1,8 @@
 SampleApp::Application.routes.draw do
 	resources :users
 	# get "users/new" -> Become useless as long there is the "resource :users" line
-	resources :sessions, only: [:new, :create, :destroy]
+	resources :sessions, only: [:new, :create, :destroy],
+												requirements: { protocol: 'https' } 
 	
 	root to: 'static_pages#home'
 
