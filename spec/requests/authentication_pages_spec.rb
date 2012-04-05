@@ -1,4 +1,4 @@
-require 'spec_helper'
+ï»¿require 'spec_helper'
 
 describe "Authentication" do
 	subject { page }
@@ -62,7 +62,7 @@ describe "Authentication" do
 				end
 				
 				describe "submitting the update action" do
-					before { put user_path(user) } # Une autre façon d'accéder à l'action qu'utiliser visit de Capybara ??? 
+					before { put user_path(user) } # Une autre facon d'acceder al'action qu'utiliser visit de Capybara ??? 
 					specify { response.should redirect_to(signin_path) }
 				end
 				
@@ -70,7 +70,21 @@ describe "Authentication" do
           before { visit users_path }
           it { should have_selector('title', text: 'Sign in') }
         end
-				
+			end
+			
+			describe "in the Microposts controller" do
+				describe "submitting to the create action" do
+          before { post microposts_path }
+          specify { response.should redirect_to(signin_path) }
+        end
+
+        describe "submitting to the destroy action" do
+          before do
+            micropost = FactoryGirl.create(:micropost)
+            delete micropost_path(micropost)
+          end
+          specify { response.should redirect_to(signin_path) }
+        end
 			end
 			
 			describe "when attempting to visit a protected page" do

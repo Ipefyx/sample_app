@@ -1,19 +1,18 @@
-<%= provide(:title, 'All users') %>
+﻿<%= provide(:title, 'All users') %>
 <h1>All users</h1>
 
 <%= will_paginate %>
 
 <ul class="users">
-	<% @users.each do |user| %>
-		<!--
+	<!-- <% @users.each do |user| %>
 		<li>
 			<%= gravatar_for user, size:52 %>
 			<%= link_to user.name, user %>
 		</li>
 		-->
-		<%= render user %>
+		<%= render @users %>
 		<!-- With the command render with a variable 'user' as param, Ruby looks after a partial called '_user.html.erb' -->
-	<% end %>
+	<!-- <% end %> -->
 </ul>
 
 <%= will_paginate %>

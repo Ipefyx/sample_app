@@ -1,6 +1,7 @@
-class UsersController < ApplicationController
+ï»¿class UsersController < ApplicationController
 	# force_ssl
 	before_filter :signed_in_user, only: [:index, :edit, :update, :destroy]
+	before_filter :signed_out_user, only: [:new, :create]
 	before_filter :correct_user, only: [:edit, :update]
 	before_filter :admin_user,     only: :destroy
 	
@@ -11,13 +12,16 @@ class UsersController < ApplicationController
 	
   def show
 		@user = User.find(params[:id])
+		@microposts = @user.microposts.paginate(page: params[:page])
   end
   
   def new
+		# redirect_to(root_path) if signed_in? # posible aussi de creer un before_filter signed_out
 		@user = User.new
   end
 	
 	def create
+		# redirect_to(root_path) if signed_in?
 		@user = User.new(params[:user])
 		if @user.save
 			sign_in @user
@@ -29,11 +33,11 @@ class UsersController < ApplicationController
 	end
 	
 	def edit
-		# @user = User.find(params[:id]) # Plus besoin de cette ligne care deja executée dans correct_user par before_filter
+		# @user = User.find(params[:id]) # Plus besoin de cette ligne care deja executees dans correct_user par before_filter
 		# @user = User.find_by_remember_token(cookies[:remember_token]) # put current_user in a helper ?
-		# @user = current_user # Apparement je peux utiliser les sessions_helpers aussi, surement grace à l'include dans l'application controler
+		# @user = current_user # Apparement je peux utiliser les sessions_helpers aussi, surement grace a l'include dans l'application controler
 		
-		# Note: les 3 façons fonctionnent mais les deux derniers font echouer les tests... why ? D:
+		# Note: les 3 facons fonctionnent mais les deux derniers font echouer les tests... why ? D:
 	end
 	
 	def update
@@ -54,12 +58,9 @@ class UsersController < ApplicationController
     redirect_to users_path
 	end
 	
-	private
-		def signed_in_user
-			unless signed_in?
-				store_location
-				redirect_to signin_path, notice: "Please sign in."
-			end
+	private	
+		def signed_out_user
+			redirect_to(root_path) if signed_in?
 		end
 		
 		def correct_user
