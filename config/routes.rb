@@ -1,8 +1,13 @@
 SampleApp::Application.routes.draw do
-	resources :users
+	resources :users do
+		member do
+			get :following, :followers
+		end
+	end
 	# get "users/new" -> Become useless as long there is the "resource :users" line
 	resources :sessions, only: [:new, :create, :destroy],	requirements: { protocol: 'https' } 
 	resources :microposts, only: [:create, :destroy]
+	resources :relationships, only: [:create, :destroy]
 	
 	root to: 'static_pages#home'
 
